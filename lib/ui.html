@@ -1,0 +1,201 @@
+<style>
+    #documan-container {
+        z-index: 9999;
+        position: fixed;
+        background: #51525c96;
+        width: 30%;
+        height: 100%;
+        top: 0;
+        right: 0;
+    }
+
+    #documan-menu-type {
+        width: 100%;
+        background: #ffffff17;
+        border: none;
+        outline: none;
+    }
+
+    #documan-submit {
+        text-align: center;
+    }
+
+    #documan-input {
+        width: 80%;
+        background: #ffffff17;
+        border: none;
+        outline: none;
+    }
+
+    #documan-file {
+        
+    }
+
+    .documan-hr {
+        border: 1px solid #3f3f3f;
+    }
+
+    #documan-view {
+        width: 100%;
+        height: 100%;
+        padding: 15px;
+    }
+
+    #documan-context {
+        width: 100%;
+        height: 20%;
+        background: #ffffff17;
+        font-size: .01em;
+        line-height: 10px;
+    }
+
+    #documan-content {
+        width: 100%;
+        height: 20%;
+        background: #ffffff17;
+        font-size: .01em;
+        line-height: 10px;
+    }
+
+    #documan-formatted {
+        width: 100%;
+        height: 300px;
+        background: #ffffff17;
+        font-size: .01em;
+        line-height: 10px;
+        padding: 15px;
+        overflow-y: scroll;
+    }
+
+    #documan-formatted h1 {
+        font-size: .04em;
+    }
+
+    #documan-formatted h2 {
+        font-size: .03em;
+    }
+    
+    #documan-formatted h3 {
+        font-size: .02em;
+    }
+
+    .documan-btn {
+        background: #6f6f6f;
+        padding: 5px;
+    }
+
+    .documan-btn:hover {
+        background: #3f3f3f;
+    }
+
+    .one-em {
+        font-size: 1em;
+        line-height: 1em;
+    }
+
+    .medium-small-em {
+        font-size: .8em;
+        line-height: 1em;
+    }
+
+    .small-em {
+        font-size: .6em;
+        line-height: 1em;
+    }
+
+    .top-bottom-margin-15px {
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+</style>
+<div id="documan-container">
+
+    <div id="documan-state">
+        <!-- questions asked / questions answered / loading bar / current action performing -->
+        <!-- checkbox to turn on and off processing -->
+        <div style="padding: 15px;">
+            <input type="checkbox" id="documan-process" checked>
+            <label for="documan-process" style="font-size: 1.2em; padding-left: 20px">Documan Running</label>
+            <span id="documan-error-wrapper" style="float:right;">
+                <span id="documan-error">0</span> Errors | 
+                <span>Q/A <span id="documan-q-count">0</span>/<span id="documan-a-count">0</span></span>
+            </span>
+        </div>
+        
+        <hr class="documan-hr">
+
+        <div style="text-align: center;">
+            <span id="documan-percentage">0 Items in Queue.</span>
+        </div>
+        <hr class="documan-hr">
+        <div id="documan-state-message" style="text-align: center;">Waiting on you :)</div>
+        <hr class="documan-hr">
+    </div>
+
+    <div id="documan-wrapper">
+        <!-- options with 1 option Document -->
+        <select id="documan-menu-type">
+            <option value="1" selected>Document</option>
+        </select>
+        <hr class="documan-hr">
+        
+        <div id="documan-view">
+            <!-- textarea for context -->
+            <!-- input for document to create from context -->
+            <!-- button to submit that input -->
+            <input type="text" id="documan-input" placeholder="Document Name">
+            <button id="documan-submit" class="documan-btn">Create Doc</button>
+
+            <hr class="documan-hr">
+            
+            <input type="file" id="documan-file" multiple>
+            
+            <hr class="documan-hr">
+
+            <div class="top-bottom-margin-15px">
+                <h3 class="one-em">Context</h3>
+                <p class="small-em">
+                    This is the short term memory AKA context of what you're talking about.
+                    You can fill in your own context or upload files to have AI load it for you.
+                </p>
+            </div>
+
+            <div id="documan-context-download-wrapper">
+                <button id="documan-context-download"  class="documan-btn">Download Context</button>
+                <button id="documan-context-download" class="documan-btn" style="float:right">Upload to Memory</button>
+                <hr class="documan-hr">                
+            </div>
+
+            <div>
+                <textarea id="documan-context" placeholder="Context"></textarea>
+            </div>
+            <!-- textarea for content -->
+            <hr class="documan-hr">
+            
+            <div class="top-bottom-margin-15px">
+                <h3 class="one-em">State</h3>
+                <p class="small-em">This is the state AKA save file for your document</p>
+            </div>
+
+            <div id="documan-content-download-wrapper">
+                <button id="documan-content-download"  class="documan-btn">Download State</button>
+                <button id="documan-content-download" class="documan-btn" style="float:right">Upload State</button>
+                <hr class="documan-hr">                
+            </div>
+
+            <textarea id="documan-content" placeholder="Content"></textarea>
+
+            <div class="top-bottom-margin-15px">
+                <h3 class="one-em">Rendered Output</h3>
+                <p class="small-em">This is the rendered output of your markdown document</p>
+            </div>
+            <button id="documan-document-download"  class="documan-btn">Download Document</button>
+            <div id="documan-formatted"></div>
+
+        </div>
+    </div>
+    <!-- file upload multifile -->
+    
+
+    <!--  -->
+</div>

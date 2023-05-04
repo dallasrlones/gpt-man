@@ -1,0 +1,36 @@
+{
+  "name": "GPT-To-Document",
+  "description": "Base Level Extension",
+  "version": "1.0",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "hello_extensions.png"
+  },
+  "content_scripts": [
+    {
+      "js": [
+        "services/sounds.js",
+        "services/brain.js",
+        "services/actions.js",
+        "services/document_builder_logic.js",
+        "services/document_builder_ui.js",
+        "services/prompts.js",
+        "services/selectors.js",
+        "lib/markdownit.js"
+      ],
+      "matches": [
+        "https://chat.openai.com/*"
+      ]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["lib/*"],
+      "matches": ["*://*/*"]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
