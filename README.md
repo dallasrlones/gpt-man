@@ -3,6 +3,8 @@ Chrome Extension to Automate ChatGPT to write full Documents such as a Business 
 
 ## WORK IN PROGRESS
 
+Currently can only upload .txt files
+
 # Installation
 
 Ask chat-gpt how to install a custom chrome extension, you want to "Load Unpacked" the entire folder that was downloaded.
