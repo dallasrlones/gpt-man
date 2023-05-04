@@ -334,6 +334,9 @@ const processAnswer = (answer) => {
     }
 
     playSound('typewriter_long');
+    playSound('typewriter_long');
+    playSound('typewriter_long');
+    playSound('typewriter_long');
 
     if (lastDigestedAnswer === parsedAnswer) {
         return;
@@ -519,7 +522,7 @@ try {
     console.log(err)
 }
 
-let intervalSpeed = 10000;
+let intervalSpeed = 30000;
 
 setTimeout(() => {
     initialize();
