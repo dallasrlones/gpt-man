@@ -11,6 +11,10 @@ If it stops typing for more than a few minutes then it's probably broken broken 
 
 No typing sounds = bad or process complete
 
+## Notes
+
+The interval it loops at is 10 seconds, this is to try and attempt to prevent a rate limit. The rate limit isn't just questions asked, it also takes into account how many tokens have been sent into that rate. So...10 seconds...cross your fingers. It looks slow, but its magic.
+
 # Installation
 
 Ask chat-gpt how to install a custom chrome extension, you want to "Load Unpacked" the entire folder that was downloaded.
