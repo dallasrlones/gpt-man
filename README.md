@@ -5,6 +5,12 @@ Chrome Extension to Automate ChatGPT to write full Documents such as a Business 
 
 Currently can only upload .txt files
 
+When it errors out it usually does it in 3's lol (probalby a loop code smell on my end) it will try to fix it so sit still.
+
+If it stops typing for more than a few minutes then it's probably broken broken lol.
+
+No typing sounds = bad or process complete
+
 # Installation
 
 Ask chat-gpt how to install a custom chrome extension, you want to "Load Unpacked" the entire folder that was downloaded.
