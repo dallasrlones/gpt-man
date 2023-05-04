@@ -2,3 +2,23 @@
 Chrome Extension to Automate ChatGPT to write full Documents such as a Business Plan based on Context you give it via file uploads
 
 ## WORK IN PROGRESS
+
+# Installation
+
+Ask chat-gpt how to install a custom chrome extension, you want to "Load Unpacked" the entire folder that was downloaded.
+
+# The Good Shit
+
+If it installed correctly you will see a panel on the right side, click inside the page in the first 1-2 seconds to get sounds.
+
+If you don't have sounds you didn't click fast enough :p
+
+# Getting Started
+
+To begin, upload some files containing the context of yo sheeeeeit
+
+## Context
+
+That fills the context section in the panel, this is like your short term memory AKA context. Once that is generated you can enter a document name and click create doc.
+
+The sound will walk you through the process, I made her custom...you're welcome :p
