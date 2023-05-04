@@ -283,7 +283,7 @@ const attemptToProcessJSONAnswer = (answer) => {
                 bracketString += '}';
             }
     
-            const parsedAnswer = JSON.parse(answer + bracketString);
+            const parsedAnswer = JSON.parse(subStringFromOpenAndCloseBracket + bracketString);
             return parsedAnswer;
         }
     
