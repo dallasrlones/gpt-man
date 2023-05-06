@@ -11,6 +11,7 @@
     {
       "js": [
         "services/sounds.js",
+        "services/questionaire.js",
         "services/actions.js",
         "services/listeners.js",
         "services/utils.js",

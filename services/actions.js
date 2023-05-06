@@ -57,8 +57,20 @@ const actionMethods = {
         debug('Creating titles and subtitles')
         // { "title 1":  ["Subtitle 1", "Subtitle 2", ...], ... }
         for (const title in payload.payload) {
+
+            if (state.outline[title]) {
+                debug(`Title ${title} already exists`)
+                continue;
+            }
+
             state.outline[title] = {};
             for (const subtitle of payload.payload[title]) {
+
+                if (state.outline[title][subtitle]) {
+                    debug(`Subtitle ${subtitle} already exists`)
+                    continue;
+                }
+
                 state.outline[title][subtitle] = {};
                 state.queue.push(promptCreateSectionsForSubTitle(title, subtitle));
             }
@@ -84,6 +96,12 @@ const actionMethods = {
 
         for (const section of sections) {
             debug(`Creating section ${section}`)
+
+            if (state.outline[title][subtitle][section]) {
+                debug(`Section ${section} already exists`)
+                continue;
+            }
+
             state.outline[title][subtitle][section] = [];
             state.queue.push(promptCreateTopicsForSection(title, subtitle, section));
         }
@@ -133,5 +151,6 @@ const actionMethods = {
     'CREATE_PARAGRAPH': (payload, done) => {
         debug('Creating paragraph')
         done();
-    }
+    },
+    'ASK_QUESTIONS_FOR_CONTEXT': questionaireActions.askQuestionsForContext
 };

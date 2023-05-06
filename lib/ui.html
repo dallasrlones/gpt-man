@@ -91,15 +91,15 @@
     }
 
     #documan-formatted h1 {
-        font-size: .04em;
+        color: #1d1d1d;
     }
 
     #documan-formatted h2 {
-        font-size: .03em;
+        color: gray;
     }
     
     #documan-formatted h3 {
-        font-size: .02em;
+        color: rgb(69, 69, 69);
     }
 
     .documan-btn {
@@ -130,7 +130,74 @@
         margin-top: 15px;
         margin-bottom: 15px;
     }
+
+    #documan-questionaire {
+        z-index: 99999;
+        position: fixed;
+        background: #454651c4;
+        width: 50%;
+        height: 85%;
+        top: 0;
+        right: 30%;
+        display: none;
+        color: white;
+        padding: 15px;
+        overflow: scroll;
+        box-shadow: inset -1px 0 15px #0000008a;
+    }
+
+    .documan-questionaire-question {
+        padding: 5px;
+        margin-bottom: 5px;
+        border-bottom: 1px solid #ffffff29;
+    }
+
+    #documan-questionaire-context-wrapper {
+        width: 100%;
+    }
+
+    #documan-questionaire-context {
+        width: 100%;
+    }
+
+    #documan-questionaire-questions {
+        margin-top: 50px;
+    }
+
+    #documan-questionaire-context-wrapper {
+        margin-top: 20px;
+        width: 100%;
+    }
+
+    #documan-questionaire-context {
+        width: 100%;
+        height: 100px;
+        overflow: scroll;
+        background: #ffffff17;
+    }
 </style>
+
+<div id="documan-questionaire">
+    <h3>Questionaire</h3>
+    <p>Open AI Needs More Context, Please Answer These Questions Below</p>
+    <div id="documan-questionaire-questions">
+        <div class="documan-questionaire-question">Test Question?</div>
+        <div class="documan-questionaire-question">Test Question?</div>
+        <div class="documan-questionaire-question">Test Question?</div>
+        <div class="documan-questionaire-question">Test Question?</div>
+        <div class="documan-questionaire-question">Test Question?</div>
+        <div class="documan-questionaire-question">Test Question?</div>
+        <div class="documan-questionaire-question">Test Question?</div>
+        <div class="documan-questionaire-question">Test Question?</div>
+        <div class="documan-questionaire-question">Test Question?</div>
+        <div class="documan-questionaire-question">Test Question?</div>
+    </div>
+    <div id="documan-questionaire-context-wrapper">
+        <textarea id="documan-questionaire-context"></textarea>
+    </div>
+    <button class="documan-btn">Save To Context</button>
+</div>
+
 <div id="documan-container">
 
     <div id="documan-state">

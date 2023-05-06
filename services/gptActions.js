@@ -49,9 +49,16 @@ const newGptChatButton = () => {
 const sendGptInput = (input) => {
     debug('Sending GPT input')
     gptInput().value = input;
+    state.last_question = input;
     
     setTimeout(() => {
-        submitGptInput();
+        try {
+            submitGptInput();
+        } catch (err) {
+            console.log(err)
+            console.log(gptCurrentStatus())
+            state.queue.unshift(state.last_question);
+        }
     }, 500);
 };
 
@@ -65,7 +72,7 @@ const askQuestion = (prompt) => {
     sendGptInput(prompt);
     state.questions_asked += 1;
     state.intervalsSinceLastQuestion = 0;
-    for (let i = 0; i < 3; i++) { playSound('typewriter_long'); }
+    for (let i = 0; i < 2; i++) { playSound('typewriter_long'); }
 };
 
 const insertUI = () => {
