@@ -70,6 +70,12 @@ const formatDocIfExists = () => {
     }
 };
 
+const scrollElementToAnchor = (element, anchor) => {
+    debug('Scrolling element to anchor')
+    const elementToScrollTo = element.querySelector(`#${anchor}`);
+    elementToScrollTo.scrollIntoView();
+};
+
 const gatherAndOrderTalkingPoints = () => {
     debug('Gathering and ordering talking points')
     const talkingPoints = Object.keys(state.context).reduce((acc, file) => {

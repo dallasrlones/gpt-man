@@ -217,7 +217,7 @@ const loop = () => {
         const parsedAnswer = attemptToProcessJSONAnswer(state.last_answer);
         if (parsedAnswer == false) {
             debug('Answer could not be parsed')
-            playSound('attempting_recover')
+            playSound('invalid_response')
             addToFrontOfQueue(promptCreateCouldntUnderstandAnswer());
             state.questions_processed += 1;
         } else {
@@ -241,6 +241,10 @@ const loop = () => {
             actionMethods[actionObj.action](actionObj.payload);
             askQuestion(state.last_question);
         }
+    }
+
+    if (!queueHasItems() && answeredIsEqualToProcessed() && state.uploading == false && state.questions_answered == state.questions_asked && state.questions_answered > 1) {
+        playSound('document_complete')
     }
 
     updateSaveFile();

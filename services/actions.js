@@ -132,11 +132,6 @@ const actionMethods = {
             state.outline[title][subtitle][section].push(talkingPoint);
         }
 
-        // if the queue is now empty and we have no more answers to process then we're done
-        if (!queueHasItems() && answeredIsEqualToProcessed()) {
-            playSound('document_complete')
-        }
-
         done();
     },
     'ACTION_COMPLETE': (payload, done) => {
