@@ -16,12 +16,12 @@
         outline: none;
     }
 
-    #documan-submit {
+    #documan-create-doc {
         text-align: center;
     }
 
     #documan-input {
-        width: 80%;
+        width: 70%;
         background: #ffffff17;
         border: none;
         outline: none;
@@ -55,9 +55,18 @@
         background: #ffffff17;
         font-size: .01em;
         line-height: 10px;
+        color: #47baff;
     }
 
-    #documan-formatted {
+    #documan-outline {
+        width: 100%;
+        height: 20%;
+        background: #ffffff17;
+        font-size: .01em;
+        line-height: 10px;
+    }
+
+    /* #documan-formatted {
         width: 100%;
         height: 300px;
         background: #ffffff17;
@@ -65,6 +74,20 @@
         line-height: 10px;
         padding: 15px;
         overflow-y: scroll;
+    } */
+
+    #documan-formatted {
+        color: #1d1d1d;
+        height: 80%;
+        background: #ffffffe3;
+        font-size: .01em;
+        line-height: 10px;
+        padding: 15px;
+        overflow-y: scroll;
+        position: fixed;
+        top: 0px;
+        right: 32%;
+        width: 35%;
     }
 
     #documan-formatted h1 {
@@ -125,7 +148,7 @@
         <hr class="documan-hr">
 
         <div style="text-align: center;">
-            <span id="documan-percentage">0 Items in Queue.</span>
+            <span id="documan-percentage">0 Items in Queue.</span> | <span id="documan-countdown"></span>s
         </div>
         <hr class="documan-hr">
         <div id="documan-state-message" style="text-align: center;">Waiting on you :)</div>
@@ -144,7 +167,7 @@
             <!-- input for document to create from context -->
             <!-- button to submit that input -->
             <input type="text" id="documan-input" placeholder="Document Name">
-            <button id="documan-submit" class="documan-btn">Create Doc</button>
+            <button id="documan-create" class="documan-btn">Create Doc</button>
 
             <hr class="documan-hr">
             
@@ -162,7 +185,7 @@
 
             <div id="documan-context-download-wrapper">
                 <button id="documan-context-download"  class="documan-btn">Download Context</button>
-                <button id="documan-context-download" class="documan-btn" style="float:right">Upload to Memory</button>
+                <button id="documan-context-copy" class="documan-btn" style="float:right">Copy Context</button>
                 <hr class="documan-hr">                
             </div>
 
@@ -179,17 +202,32 @@
 
             <div id="documan-content-download-wrapper">
                 <button id="documan-content-download"  class="documan-btn">Download State</button>
-                <button id="documan-content-download" class="documan-btn" style="float:right">Upload State</button>
+                <button id="documan-content-copy" class="documan-btn" style="float:right">Copy State</button>
                 <hr class="documan-hr">                
             </div>
 
             <textarea id="documan-content" placeholder="Content"></textarea>
 
+            <hr class="documan-hr">
+            
+            <div class="top-bottom-margin-15px">
+                <h3 class="one-em">Outline</h3>
+                <p class="small-em">This is the Outline of your document</p>
+            </div>
+
+            <div id="documan-content-outline-wrapper">
+                <button id="documan-outline-download"  class="documan-btn">Download Outline</button>
+                <button id="documan-outline-copy" class="documan-btn" style="float:right">Copy Outline</button>
+                <hr class="documan-hr">                
+            </div>
+
+            <textarea id="documan-outline" placeholder="Content"></textarea>
+
             <div class="top-bottom-margin-15px">
                 <h3 class="one-em">Rendered Output</h3>
                 <p class="small-em">This is the rendered output of your markdown document</p>
             </div>
-            <button id="documan-document-download"  class="documan-btn">Download Document</button>
+            <button id="documan-outline-download"  class="documan-btn">Download Document</button>
             <div id="documan-formatted"></div>
 
         </div>

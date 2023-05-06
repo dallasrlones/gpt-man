@@ -2,8 +2,16 @@ const businessTypeInput = () => {
     return document.getElementById("documan-input");
 };
 
+const selectorDocumentType = () => {
+    return document.getElementById("documan-input");
+};
+
 const selectorDocumanSubmit = () => {
     return document.getElementById("documan-submit");
+};
+
+const selectorButtonCreateDocument = () => {
+    return document.getElementById("documan-create");
 };
 
 const rightSideSubmitButton = () => {
@@ -18,11 +26,43 @@ const selectorDocumanContentWindow = () => {
     return document.getElementById("documan-content");
 };
 
+const selectorOutline = () => {
+    return document.getElementById("documan-outline");
+};
+
+const selectorDocument = () => {
+    return document.getElementById("documan-formatted");
+};
+
+const selectorButtonDownloadContext = () => {
+    return document.getElementById("documan-context-download");
+};
+
+const selectorButtonCopyContext = () => {
+    return document.getElementById("documan-context-copy");
+};
+
+const selectorButtonDownloadOutline = () => {
+    return document.getElementById("documan-outline-download"); 
+};
+
+const selectorButtonCopyOutline = () => {
+    return document.getElementById("documan-outline-copy");
+};
+
+const selectorButtonDownloadDocument = () => {
+    return document.getElementById("documan-content-download");
+};
+
+const selectorButtonCopyDocument = () => {
+    return document.getElementById("documan-content-copy");
+};
+
 const selectorDocumanCurrentAction = () => {
     return document.getElementById("documan-state-message");
 };
 
-const mainElement = () => {
+const selectorMainElement = () => {
     return document.querySelector("main");
 };
 
@@ -64,4 +104,24 @@ const selectorDocumanPercentageDone = () => {
 
 const selectorDocumanFormatted = () => {
     return document.getElementById("documan-formatted");
+};
+
+const selectorDocumanCountdown = () => {
+    return document.getElementById("documan-countdown");
+};
+
+const selectorDocumanQuestionsAsked = () => {
+    return document.getElementById("documan-q-count");
+};
+
+const selectorDocumanQuestionsAnswered = () => {
+    return document.getElementById("documan-a-count");
+};
+
+const selectorDocumanQueueLength = () => {
+    return document.getElementById("documan-percentage");
+};
+
+const selectorDocumanSaveFile = () => {
+    return document.getElementById("documan-content");
 };

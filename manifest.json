@@ -11,13 +11,14 @@
     {
       "js": [
         "services/sounds.js",
-        "services/brain.js",
         "services/actions.js",
-        "services/document_builder_logic.js",
-        "services/document_builder_ui.js",
-        "services/prompts.js",
+        "services/listeners.js",
+        "services/utils.js",
+        "services/prompts2.js",
         "services/selectors.js",
-        "lib/markdownit.js"
+        "services/gptActions.js",
+        "lib/markdownit.js",
+        "brain.js"
       ],
       "matches": [
         "https://chat.openai.com/*"

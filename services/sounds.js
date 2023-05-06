@@ -4,10 +4,16 @@ let currentSourceNode = null;
 // Create a variable to keep track of the sound queue
 let soundQueue = [];
 
-const audioCtx = new AudioContext();
+let audioCtx = null;
 
 // Function to load a sound file and add it to the sound queue
 function playSound(sound_name) {
+  debug(`Playing sound ${sound_name}`)
+  if(audioCtx == null) {
+    debug('Creating new audio context')
+    audioCtx = new AudioContext()
+  }
+
   // Load the sound file into an AudioBuffer object
   const request = new XMLHttpRequest();
   // if soundname contains a . in then name then its not a .wav
@@ -27,6 +33,7 @@ function playSound(sound_name) {
       soundQueue.push(buffer);
       // If there's no currently playing sound, start playing the first sound in the queue
       if (!currentSourceNode) {
+        debug('Playing next sound')
         playNextSound();
       }
     });
@@ -36,8 +43,10 @@ function playSound(sound_name) {
 
 // Function to play the next sound in the sound queue
 function playNextSound() {
+  debug('Playing next sound')
   // If there's no sound in the queue, stop playback and return
   if (soundQueue.length === 0) {
+    debug('No sounds in queue')
     currentSourceNode = null;
     return;
   }
@@ -53,6 +62,7 @@ function playNextSound() {
   currentSourceNode = sourceNode;
   // When the sound finishes playing, play the next sound in the queue
   sourceNode.onended = function() {
+    debug('playing next sound')
     currentSourceNode = null;
     playNextSound();
   };
@@ -60,9 +70,14 @@ function playNextSound() {
 
 let currentRepeatSongLocation = '';
 let currentSourceSongNode = null;
-const audioCtx2 = new AudioContext();
+let audioCtx2 = null;
 // play sound in loop at 10% volume
 const playSoundOnRepeat = (sound_name, volume) => {
+  debug(`Playing sound ${sound_name} on repeat`)
+  if (audioCtx2 == null) {
+    debug('Creating new audio context')
+    audioCtx2 = new AudioContext()
+  }
   // play currentRepeatSongLocation at 10% volume, after that repeat currentReapeatSongLocation at 10% volume
   // when someone changes the song or volume by running playSoundOnRepeat again, it will change the repeat song
   // if the current song is the same as the one we want to play, then just change the volume
@@ -95,6 +110,7 @@ const playSoundOnRepeat = (sound_name, volume) => {
       // When the sound finishes playing, play the next sound in the queue
       sourceNode.onended = function() {
         currentSourceSongNode = null;
+        debug('playing next sound')
         return playSoundOnRepeat(currentRepeatSongLocation, volume);
       };
     });
@@ -115,9 +131,14 @@ const currentSongs = [
 ];
 let currentSongIndex = 0;
 let currentSourceSongNode2 = null;
-const audioCtx3 = new AudioContext();
+let audioCtx3 = null;
 // play sound in loop at 10% volume
 const playSongOnRepeat = (sound_name, volume) => {
+  debug(`Playing sound ${sound_name} on repeat`)
+  if (audioCtx3 == null) {
+    debug('Creating new audio context')
+    audioCtx3 = new AudioContext()
+  }
   // play currentRepeatSongLocation at 10% volume, after that repeat currentReapeatSongLocation at 10% volume
   // when someone changes the song or volume by running playSoundOnRepeat again, it will change the repeat song
   // if the current song is the same as the one we want to play, then just change the volume
@@ -156,6 +177,7 @@ const playSongOnRepeat = (sound_name, volume) => {
         if (currentSongIndex === currentSongs.length) {
           currentSongIndex = 0;
         }
+        debug('playing next sound')
         return playSongOnRepeat(currentSongs[currentSongIndex], volume);
       };
     });
