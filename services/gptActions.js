@@ -59,7 +59,7 @@ const sendGptInput = (input) => {
             console.log(gptCurrentStatus())
             state.queue.unshift(state.last_question);
         }
-    }, 500);
+    }, 1000);
 };
 
 const answerAvailable = () => {
