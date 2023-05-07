@@ -48,11 +48,13 @@ const openQuestionaire = (questions, done) => {
         closeQuestionaireAndUpdateContext();
         done();
     });
+    playSound('context_needed')
 };
 
 const closeQuestionaireAndUpdateContext = () => {
     const newContext = selectorQuestionaireContext().value;
-    state.context += `\n${newContext}`;
+    // state.context += `\n${newContext}`;
+    selectorDocumanContextWindow().value = selectorDocumanContextWindow().value + `\n${newContext}`;
     hideQuestionaire();
     selectorQuestionaireContext().value = '';
     selectorQuestionaireQuestions().innerHTML = '';

@@ -51,37 +51,38 @@ const promptCreateDocument = (docName) => {
 
 const promptTemplateForTitlesAndSubTitles = () => {
     const template = {
-        "Title 1": ['Sub Title 1', 'Sub Title 2'],
-        "Title 2": ['Sub Title 1', 'Sub Title 2']
+        "Title 1 Name": ['Sub Title 1 Name', 'Sub Title 2 Name', '...'],
+        "Title 2 Name": ['Sub Title 1 Name', 'Sub Title 2 Name', '...'],
+        "another title name": ['more', 'subtitles']
     };
     return promptBuildActionResponse('CREATE_TITLES_AND_SUBTITLES', { payload: JSON.stringify(template) });
 };
 
 const promptCreateTitlesAndSubTitlesForDocument = docName => {
-    let prompt = `Please create me a document outline in JSON format for a ${docName}, include all the titles and sub-titles I should talk about. Please use the information from the chunks I sent you.`;
+    let prompt = `Please create me a document outline in JSON format for a ${docName}, include all the titles and sub-titles I should talk about. Please use the information from the chunks I sent you and don't make anything up.`;
     prompt += promptYourResponseShouldLookLike(promptTemplateForTitlesAndSubTitles());
     return prompt;
 };
 
 const promptTemplateSectionsForSubTitle = (title, subtitle) => {
-    let template = ['Section Topic 1', 'Section Topic 2', 'Section Topic 3'];
+    let template = ['Section Topic 1', 'Section Topic 2', 'Section Topic 3', '...'];
     return promptBuildActionResponse('CREATE_SECTIONS', { title, subtitle, payload: template });
 };
 
 const promptCreateSectionsForSubTitle = (title, subtitle) => {
-    let prompt = `Please create me an outline for the ${title} - ${subtitle} sections in JSON format. Please use the information from the chunks I sent you.`;
+    let prompt = `Please create me an outline for the ${title} - ${subtitle} sections in JSON format. Please use the information from the chunks I sent you and don't make anything up.`;
     prompt += promptYourResponseShouldLookLike(promptTemplateSectionsForSubTitle(title, subtitle));
     return prompt;
 };
 
 const promptTemplateTopicsForSection = (title, subtitle, section) => {
-    let template = ['Section Talking Point 1', 'Talking Point 2', 'Taling Point 3'];
+    let template = ['Section Talking Point 1', 'Talking Point 2', 'Taling Point 3', '...'];
     return promptBuildActionResponse('CREATE_TALKING_POINTS', { title, subtitle, section, payload: template });
 };
 
 const promptCreateTopicsForSection = (title, subtitle, section) => {
     // know that I will be using these as blueprints to write paragraphs with these later so think of each talking point as a paragraph
-    let prompt = `Please write me the ${title} - ${subtitle} - ${section} talking points for me in JSON format. Please use the information from the chunks I sent you.`;
+    let prompt = `Please write me the ${title} - ${subtitle} - ${section} talking points for me in JSON format. Please use the information from the chunks I sent you and don't make anything up.`;
     prompt += ` We'll be using these as blueprints later to write paragraphs with these talking points.`;
     prompt += promptYourResponseShouldLookLike(promptTemplateTopicsForSection(title, subtitle, section));
     return prompt;

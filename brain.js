@@ -1,5 +1,6 @@
 const state = {
     queue: [],
+    final_queue: [],
     total_gone_in_queue: 0,
     last_question: null,
     last_answer: null,
@@ -13,15 +14,42 @@ const state = {
     context: {},
     context_talking_points: [],
     uploading: false,
-    intervalsSinceLastQuestion: 0,
-    loopIntervalSpeed: 1000 * 20,
+    intervals_since_last_question: 0,
+    loopIntervalSpeed: 1000 * 30,
     sinceLastMemoryUpdate: 0,
     countDownTime: 0,
     debug: false,
-    error_count: 0
+    error_count: 0,
+    retry_count: 0,
+    speach_queue: [],
+    speaking: false
 };
 
 state.countDownTime = state.loopIntervalSpeed / 1000;
+
+const resetState = () => {
+    debug('Resetting state')
+    state.queue = [];
+    state.final_queue = [];
+    state.total_gone_in_queue = 0;
+    state.last_question = null;
+    state.last_answer = null;
+    state.last_error = null;
+    state.powerOn = true;
+    state.questions_asked = 0;
+    state.questions_answered = 0;
+    state.questions_processed = 0;
+    state.outline = {};
+    state.document = {};
+    state.context = {};
+    state.context_talking_points = [];
+    state.uploading = false;
+    state.intervals_since_last_question = 0;
+    state.sinceLastMemoryUpdate = 0;
+    state.countDownTime = 0;
+    state.error_count = 0;
+    state.retry_count = 0;
+};
 
 const addToErrorCount = () => {
     debug('Adding to error count')
@@ -87,7 +115,7 @@ const splitStringIntoChunks = (stringValue, chunkSize = 2000) => {
 const updateShortTermMemory = () => {
     debug('Updating short term memory')
     const chunks = splitStringIntoChunks(selectorDocumanContextWindow().value);
-    addToQueue({ action: 'MEMORY_UPLOAD_COMPLETE' });
+    addToFrontOfQueue({ action: 'MEMORY_UPLOAD_COMPLETE' });
     state.uploading = true;
     chunks.reverse().forEach((chunk, i) => {
         addToFrontOfQueue(promptCreateUploadMemory(i, chunks.length - 1,chunk));
@@ -97,7 +125,9 @@ const updateShortTermMemory = () => {
 
 const checkForMemoryUpdate = () => {
     debug('Checking for memory update');
-    state.sinceLastMemoryUpdate += 1;
+    if (state.uploading == false) {
+        state.sinceLastMemoryUpdate += 1;
+    }
 
     if (state.sinceLastMemoryUpdate > 5 && state.uploading == false) {
         state.sinceLastMemoryUpdate = 0;
@@ -168,10 +198,13 @@ const adjustMainElementWidth = () => {
 };
 
 const checkUIState = () => {
+    state.countDownTime = state.loopIntervalSpeed / 1000;
     debug('Checking UI state');
     if (selectorMainElement().style.width != '60%') {
         adjustMainElementWidth();
     }
+
+    selectorDocumanLastMemoryUdate().innerText = state.sinceLastMemoryUpdate;
 
     if (state.context_talking_points.length > 0) {
         debug('Context talking points length is greater than 0')
@@ -192,29 +225,71 @@ const checkUIState = () => {
     selectorDocumanError().innerText = state.error_count;
 };
 
-const loop = () => {
-    debug('Looping')
-    state.countDownTime = state.loopIntervalSpeed / 1000;
-    checkUIState();
-
-    if (state.powerOn == false) {
-        return;
+const checkForRegenerateResponseAndHandle = () => {
+    if (gptInput() == null && selectorRegenerateResponse() != null) {
+        debug('GPT is down')
+        playSound('shtf');
+        state.retry_count += 1;
+        if (state.retry_count > 3) {
+            state.powerOn = false;
+            setTimeout(() => {
+                state.powerOn = true;
+                state.retry_count = 0;
+            }, 1000 * 60 * 60 * 2)
+            return true;
+        }
+        selectorRegenerateResponse().click();
+        return true;
     }
 
+    return false;
+};
+
+const addToLoopIntervalCount = () => {
+    debug('Adding to loop interval count')
     state.loop_interval_count += 1;
-    state.intervalsSinceLastQuestion += 1;
+};
 
-    if (gptIsTalking()) {
-        debug('GPT is talking')
-        return;
-    }
+const addToIntervalSinceLastQuestionCount = () => {
+    debug('Adding to intervals since last question count')
+    state.intervals_since_last_question += 1;
+};
 
-    if (answerAvailable() && askedGreaterThanAnswered()) {
+const addToQuestionsAskedCount = () => {
+    debug('Adding to questions asked count')
+    state.questions_asked += 1;
+};
+
+const addToQuestionsAnsweredCount = () => {
+    debug('Adding to questions answered count')
+    state.questions_answered += 1;
+};
+
+const addToQuestionsProcessedCount = () => {
+    debug('Adding to questions processed count')
+    state.questions_processed += 1;
+};
+
+const powerIsOff = () => {
+    return state.powerOn == false;
+};
+
+const powerIsOn = () => {
+    return state.powerOn == true;
+};
+
+const answerAvailableToParse = () => {
+    return answerAvailable() && askedGreaterThanAnswered();
+};
+
+const handleAndProcessAnswerIfAvailable = () => {
+    if (answerAvailableToParse()) {
         debug('Answer is available and asked is greater than answered')
-        state.questions_answered += 1;
+        addToQuestionsAnsweredCount();
         state.last_answer = gptCurrentAnswer();
 
         const parsedAnswer = attemptToProcessJSONAnswer(state.last_answer);
+        
         if (parsedAnswer == false) {
             debug('Answer could not be parsed')
             playSound('invalid_response')
@@ -225,7 +300,9 @@ const loop = () => {
             processAnswer(parsedAnswer, () => { state.questions_processed += 1; });
         }
     }
+};
 
+const handleAndProcessQuestionIfAvailable = () => {
     if (queueHasItems() && answeredIsEqualToProcessed()) {
         debug('Queue has items and answered is equal to processed')
         checkForMemoryUpdate();
@@ -235,17 +312,59 @@ const loop = () => {
             debug('Last question is a string')
             askQuestion(state.last_question);
         } else {
-            debug('Last question is not a string')
-            const actionObj = { ...state.last_question };
-            state.last_question = state.queue.shift();
-            actionMethods[actionObj.action](actionObj.payload);
-            askQuestion(state.last_question);
+            if (typeof state.last_question == undefined) {
+                debug('Last question is undefined')
+            } else {
+                debug('Last question is not a string')
+                const actionObj = { ...state.last_question };
+                actionMethods[actionObj.action](actionObj.payload);
+                state.last_question = state.queue.shift();
+                askQuestion(state.last_question);
+            }
+        }
+    }
+};
+
+const checkAndHandleEndOfQueue = () => {
+    debug('Checking end of queue')
+    if (!queueHasItems() && answeredIsEqualToProcessed() && state.questions_processed > 0 && state.intervals_since_last_question > 2) {
+        if (state.final_queue.length > 0) {
+            // complete run final queue
+            state.queue = [...state.final_queue]
+            state.final_queue = [];
+        } else {
+            // complete
+            // reset states
+            playSound('document_complete');
+            state.powerOn = false;
+            resetState();
         }
     }
 
-    if (!queueHasItems() && answeredIsEqualToProcessed() && state.uploading == false && state.questions_answered == state.questions_asked && state.questions_answered > 1) {
-        playSound('document_complete')
+};
+
+const loop = () => {
+    debug('Looping')
+
+    if (checkForRegenerateResponseAndHandle() || powerIsOff()) {
+        return;
     }
+
+    addToLoopIntervalCount();
+    addToIntervalSinceLastQuestionCount();
+
+    if (gptIsTalking()) {
+        debug('GPT is talking')
+        return;
+    }
+
+    // handle and process answer
+    handleAndProcessAnswerIfAvailable();
+
+    // handle and process question if available
+    handleAndProcessQuestionIfAvailable();
+
+    checkAndHandleEndOfQueue()
 
     updateSaveFile();
     checkUIState();

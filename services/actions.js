@@ -57,6 +57,7 @@ const actionMethods = {
         debug('Creating titles and subtitles')
         // { "title 1":  ["Subtitle 1", "Subtitle 2", ...], ... }
         for (const title in payload.payload) {
+            addToSpeachQueue(`creating title ${title}`);
 
             if (state.outline[title]) {
                 debug(`Title ${title} already exists`)
@@ -65,6 +66,7 @@ const actionMethods = {
 
             state.outline[title] = {};
             for (const subtitle of payload.payload[title]) {
+                addToSpeachQueue(`creating subtitle ${subtitle}`);
 
                 if (state.outline[title][subtitle]) {
                     debug(`Subtitle ${subtitle} already exists`)
@@ -85,6 +87,7 @@ const actionMethods = {
         const sections = payload.payload;
 
         setUIState(`creating sections for ${title} - ${subtitle}`);
+        addToSpeachQueue(`creating sections for ${title} - ${subtitle}`)
 
         if (!state.outline[title]) {
             debug(`Creating title ${title}`)
@@ -96,6 +99,7 @@ const actionMethods = {
 
         for (const section of sections) {
             debug(`Creating section ${section}`)
+            addToSpeachQueue(`creating section ${section}`);
 
             if (state.outline[title][subtitle][section]) {
                 debug(`Section ${section} already exists`)
@@ -115,6 +119,7 @@ const actionMethods = {
         const talkingPoints = payload.payload;
 
         setUIState(`creating talking points for ${title} - ${subtitle} - ${section}`);
+        addToSpeachQueue(`creating talking points for ${title} - ${subtitle} - ${section}`)
 
         if (!state.outline[title]) {
             debug(`Creating title ${title}`)
@@ -128,6 +133,7 @@ const actionMethods = {
         }
 
         for (const talkingPoint of talkingPoints) {
+            addToSpeachQueue(`Creating talking point. ${talkingPoint}`);
             debug(`Creating talking point ${talkingPoint}`)
             state.outline[title][subtitle][section].push(talkingPoint);
         }

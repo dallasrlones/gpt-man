@@ -41,9 +41,10 @@ const attachFileUploadListener = async () => {
 
         setUIState("Uploading files...");
 
-        event.target.files.forEach((file) => {
+        for (const file of event.target.files) {
             hanndleFileUpload(file);
-        });
+        }
+
         addToQueue(createCustomActionCompletePrompt('all_context_complete'));
     });
 };

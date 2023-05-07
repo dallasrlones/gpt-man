@@ -19,7 +19,8 @@
         "services/selectors.js",
         "services/gptActions.js",
         "lib/markdownit.js",
-        "brain.js"
+        "brain.js",
+        "services/voice.js"
       ],
       "matches": [
         "https://chat.openai.com/*"

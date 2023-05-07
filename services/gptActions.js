@@ -71,8 +71,8 @@ const askQuestion = (prompt) => {
     debug('Asking question')
     sendGptInput(prompt);
     state.questions_asked += 1;
-    state.intervalsSinceLastQuestion = 0;
-    for (let i = 0; i < 2; i++) { playSound('typewriter_long'); }
+    state.intervals_since_last_question = 0;
+    for (let i = 0; i < 3; i++) { playSound('typewriter_long'); }
 };
 
 const insertUI = () => {
