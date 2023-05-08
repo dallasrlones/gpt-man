@@ -1,5 +1,6 @@
 const addToSpeachQueue = (newSpeach) => {
     if (state.speach_enabled == false) {
+        state.speach_queue = [];
         return;
     }
 
@@ -11,6 +12,7 @@ const addToSpeachQueue = (newSpeach) => {
 
 const sayText = () => {
     if (state.speach_enabled == false) {
+        state.speach_queue = [];
         return;
     }
 
