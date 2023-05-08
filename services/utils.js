@@ -44,29 +44,77 @@ const attemptToProcessJSONAnswer = (answer) => {
     }
 };
 
-const formatDocIfExists = () => {
-    debug('Formatting doc if exists')
-    if (Object.keys(state.outline).length > 0) {
-        let markdownString = '';        
-        Object.keys(state.outline).forEach(title => {
-            markdownString += `# ${title}\n\n`;
-            const subtitles = state.outline[title];
-            Object.keys(subtitles).forEach(subtitle => {
-                markdownString += `## ${subtitle}\n\n`;
-                const sections = subtitles[subtitle];
-                Object.keys(sections).forEach(section => {
-                    markdownString += `### ${section}\n\n`;
-                    const paragraphs = sections[section];
-                    Object.keys(paragraphs).forEach(paragraph => {
-                        markdownString += `${paragraphs[paragraph]}\n\n`;
-                    });
+const formatOutlineToHtml = () => {
+    debug('Formatting outline to HTML')
+    const outline = state.outline;
+    const outlineKeys = Object.keys(outline);
+    let htmlString = '';
+    outlineKeys.forEach(title => {
+        htmlString += `<h1>${title}</h1>`;
+        const subtitles = outline[title];
+        const subtitleKeys = Object.keys(subtitles);
+        subtitleKeys.forEach(subtitle => {
+            htmlString += `<h2>${subtitle}</h2>`;
+            const sections = subtitles[subtitle];
+            const sectionKeys = Object.keys(sections);
+            sectionKeys.forEach((section, i) => {
+                htmlString += `<h3>${section}</h3>`;
+                const talkingPoints = sections[section];
+                const talkingPointKeys = Object.keys(talkingPoints);
+
+                let sectionsAnchored = true;
+                if (i === sectionKeys.length - 1) {
+                    if(talkingPointKeys.length > 0) {
+                        sectionsAnchored = false;
+                    } else {
+                        htmlString += `<span id="documan-scroll"></span>`;
+                    }
+                }
+
+                talkingPointKeys.forEach((talkingPoint, i) => {
+                    htmlString += `<p>${talkingPoints[talkingPoint]}</p>`;
+
+                    if (i === talkingPointKeys.length - 1 && sectionsAnchored === false) {
+                        htmlString += `<span id="documan-scroll"></span>`;
+                    }
                 });
             });
         });
+    });
+    return htmlString;
+};
 
-        var md = window.markdownit();
-        markdownString = md.render(markdownString);
-        selectorDocument().innerHTML = markdownString;
+const formatOutlineToMarkdown = () => {
+    let markdownString = '';        
+    Object.keys(state.outline).forEach(title => {
+        markdownString += `# ${title}\n\n`;
+        const subtitles = state.outline[title];
+        Object.keys(subtitles).forEach(subtitle => {
+            markdownString += `## ${subtitle}\n\n`;
+            const sections = subtitles[subtitle];
+            Object.keys(sections).forEach(section => {
+                markdownString += `### ${section}\n\n`;
+                const talkingPoints = sections[section];
+                Object.keys(talkingPoints).forEach(talkingPoint => {
+                    markdownString += `${talkingPoints[talkingPoint]}\n\n`;
+                });
+            });
+        });
+    });
+
+    var md = window.markdownit();
+    markdownString = md.render(markdownString);
+    return markdownString;
+};
+
+const formatDocIfExists = () => {
+    debug('Formatting doc if exists')
+    if (Object.keys(state.outline).length > 0) {
+        selectorDocument().innerHTML = formatOutlineToHtml();
+        const scroll = selectorDocumanScroll();
+        if (scroll != null) {
+            scrollElementToAnchor(selectorDocument(), 'documan-scroll');
+        }
     }
 };
 

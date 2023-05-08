@@ -52,7 +52,8 @@ const attachFileUploadListener = async () => {
 const eventListenerCreateDocument = () => {
     debug('Creating document');
     generateDocument(selectorDocumentType().value);
-    selectorDocumentType().value = "";
+    // selectorDocumentType().value = "";
+    state.outline[selectorDocumentType().value] = {};
     playSoundOnRepeat('cafe.mp3', 0.2);
     loop();
 };
@@ -116,12 +117,20 @@ const toggleDocumanRunning = () => {
 
 const saveContext = () => {
     debug('Saving context')
-    save('context', state.context);
+    save('context', selectorDocumanContextWindow().value);
 };
 
 const saveOutline = () => {
     debug('Saving outline')
     save('outline', state.outline);
+};
+
+const addSoundsListener = () => {
+    debug('Adding sounds listener')
+    selectorDocumanSounds().addEventListener('change', () => {
+        debug('Sounds listener triggered')
+        state.speach_enabled = selectorDocumanSounds().checked;
+    });
 };
 
 const setEventListeners = () => {
@@ -135,8 +144,9 @@ const setEventListeners = () => {
     selectorButtonDownloadDocument().addEventListener('click', downloadDocument);
     selectorButtonCopyDocument().addEventListener('click', copyDocument);
 
-    selectorDocumanContextWindow().addEventListener('change', saveContext);
-    selectorOutline().addEventListener('change', saveOutline);
+    selectorDocumanContextWindow().addEventListener('input', saveContext);
+    selectorOutline().addEventListener('input', saveOutline);
 
+    addSoundsListener();
     attachFileUploadListener();
 };

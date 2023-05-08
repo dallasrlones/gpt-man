@@ -185,3 +185,36 @@ const playSongOnRepeat = (sound_name, volume) => {
 
   request.send();
 };
+
+let audioCtxNow = null;
+const playSoundNow = (sound_name) => {
+  debug(`Playing sound ${sound_name} now`)
+  if (audioCtxNow == null) {
+    debug('Creating new audio context')
+    audioCtxNow = new AudioContext()
+  }
+  // Load the sound file into an AudioBuffer object
+  const request = new XMLHttpRequest();
+  // if soundname contains a . in then name then its not a .wav
+  let soundLocation = sound_name;
+  if (sound_name.indexOf('.') === -1) {
+    soundLocation = `lib/${sound_name}.wav`
+  } else {
+    soundLocation = `lib/${sound_name}`
+  }
+
+  request.open('GET', chrome.runtime.getURL(soundLocation), true);
+  request.responseType = 'arraybuffer';
+  request.onload = function() {
+    audioCtxNow.decodeAudioData(request.response, function(buffer) {
+      // Create an AudioBufferSourceNode and connect it to the AudioContext's destination node
+      const sourceNode = audioCtxNow.createBufferSource();
+      sourceNode.buffer = buffer;
+      sourceNode.connect(audioCtxNow.destination);
+      // Start playback of the sound buffer
+      sourceNode.start(0);
+    });
+  }
+
+  request.send();
+};

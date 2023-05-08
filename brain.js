@@ -22,7 +22,10 @@ const state = {
     error_count: 0,
     retry_count: 0,
     speach_queue: [],
-    speaking: false
+    speaking: false,
+    speach_enabled: true,
+    document_name: '',
+    invalid_response: false
 };
 
 state.countDownTime = state.loopIntervalSpeed / 1000;
@@ -41,7 +44,7 @@ const resetState = () => {
     state.questions_processed = 0;
     state.outline = {};
     state.document = {};
-    state.context = {};
+    // state.context = {};
     state.context_talking_points = [];
     state.uploading = false;
     state.intervals_since_last_question = 0;
@@ -49,6 +52,11 @@ const resetState = () => {
     state.countDownTime = 0;
     state.error_count = 0;
     state.retry_count = 0;
+    state.speach_queue = [];
+    state.speaking = false;
+    state.speach_enabled = true;
+    state.document_name = '';
+    state.invalid_response = false;
 };
 
 const addToErrorCount = () => {
@@ -91,7 +99,7 @@ const displayDocumentAsHTML = () => {
     return '';
 };
 
-const splitStringIntoChunks = (stringValue, chunkSize = 2000) => {
+const splitStringIntoChunks = (stringValue, chunkSize = 3500) => {
     debug(`Splitting string into chunks of ${chunkSize} words`);
     const chunks = [];
     const sentences = stringValue.split('\n');
@@ -123,13 +131,14 @@ const updateShortTermMemory = () => {
     addToFrontOfQueue(promptCreateUpdateMemory(chunks.length - 1));
 };
 
+// if invalid response, make sure memory update is run after invalid response is handled
 const checkForMemoryUpdate = () => {
     debug('Checking for memory update');
     if (state.uploading == false) {
         state.sinceLastMemoryUpdate += 1;
     }
 
-    if (state.sinceLastMemoryUpdate > 5 && state.uploading == false) {
+    if (state.sinceLastMemoryUpdate > 4 && state.uploading == false) {
         state.sinceLastMemoryUpdate = 0;
         updateShortTermMemory();
     }
@@ -137,10 +146,13 @@ const checkForMemoryUpdate = () => {
 
 const generateDocument = (docType) => {
     debug(`Generating document of type ${docType}`);
-    playSound('document_started');
+    state.document_name = docType;
+    playSoundNow('document_started');
     updateShortTermMemory();
+    addToFrontOfQueue(promptCreateQuestionsForDocument(docType))
     addToFrontOfQueue(promptCreateDocument(docType));
     addToQueue(promptCreateTitlesAndSubTitlesForDocument(docType));
+    saveContext();
 };
 
 const updateSaveFile = () => {
@@ -291,11 +303,13 @@ const handleAndProcessAnswerIfAvailable = () => {
         const parsedAnswer = attemptToProcessJSONAnswer(state.last_answer);
         
         if (parsedAnswer == false) {
+            state.invalid_response = true;
             debug('Answer could not be parsed')
-            playSound('invalid_response')
+            playSoundNow('invalid_response')
             addToFrontOfQueue(promptCreateCouldntUnderstandAnswer());
             state.questions_processed += 1;
         } else {
+            state.invalid_response = false;
             debug('Answer was parsed')
             processAnswer(parsedAnswer, () => { state.questions_processed += 1; });
         }
@@ -303,7 +317,7 @@ const handleAndProcessAnswerIfAvailable = () => {
 };
 
 const handleAndProcessQuestionIfAvailable = () => {
-    if (queueHasItems() && answeredIsEqualToProcessed()) {
+    if (queueHasItems() && answeredIsEqualToProcessed() && state.invalid_response == false) {
         debug('Queue has items and answered is equal to processed')
         checkForMemoryUpdate();
         state.last_question = state.queue.shift();
@@ -372,6 +386,12 @@ const loop = () => {
 
 const save = (itemName, itemValue) => {
     debug(`Saving ${itemName} as ${itemValue}`)
+
+    // if itemValue is equal to the current value of the item, don't save it
+    if (readSave(itemName) == JSON.stringify(itemValue) || readSave(itemName) == itemValue) {
+        return;
+    }
+
     if (typeof itemValue == 'object') {
         itemValue = JSON.stringify(itemValue);
     }

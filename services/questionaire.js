@@ -54,11 +54,14 @@ const openQuestionaire = (questions, done) => {
 const closeQuestionaireAndUpdateContext = () => {
     const newContext = selectorQuestionaireContext().value;
     // state.context += `\n${newContext}`;
-    selectorDocumanContextWindow().value = selectorDocumanContextWindow().value + `\n${newContext}`;
+    if (newContext != '') {
+        selectorDocumanContextWindow().value = selectorDocumanContextWindow().value + `\n${newContext}`;
+        updateShortTermMemory();
+    }
+    
     hideQuestionaire();
     selectorQuestionaireContext().value = '';
     selectorQuestionaireQuestions().innerHTML = '';
-    updateShortTermMemory();
 };
 
 const questionaireActions = {
