@@ -206,6 +206,7 @@ const processAnswer = (payload, done) => {
         playSoundNow('invalid_response');
         addToErrorCount();
         addToFrontOfQueue(promptCreateCouldntUnderstandAnswerSchemaMismatch(payload.action));
+        done();
         return;
     }
 
@@ -213,6 +214,7 @@ const processAnswer = (payload, done) => {
         // insert didn't understand in front of queue
         debug('Answer was not understood')
         addToFrontOfQueue(promptCreateCouldntUnderstandAnswer());
+        done();
         return;
     }
 

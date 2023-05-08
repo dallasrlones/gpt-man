@@ -82,8 +82,6 @@ const actionMethods = {
         let matches = true;
 
         Object.keys(incomingPayload.payload).forEach(title => {
-            console.log('title')
-            console.log(typeof title)
             // make sure each title is type of array
             if (!Array.isArray(incomingPayload.payload[title])) {
                 matches = false;
@@ -91,8 +89,6 @@ const actionMethods = {
 
             // make sure each subtitle is type of string
             incomingPayload.payload[title].forEach(subtitle => {
-                console.log('subtitle')
-                console.log(typeof subtitle)
                 if (typeof subtitle !== 'string') {
                     matches = false;
                 }
