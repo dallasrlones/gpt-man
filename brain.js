@@ -181,11 +181,14 @@ const queueHasItems = () => {
 
 const doesntMatchSchema = (parsedAnswer) => {
     if (parsedAnswer.action == undefined || actionMethods[parsedAnswer.action] == undefined) {
+        console.log('action undefined or missing')
         return true;
     }
 
     try {
-        return actionMethods[`${parsedAnswer.action}_SCHEMA_MATCHES`](parsedAnswer);
+        const schemaMatchResults = actionMethods[`${parsedAnswer.action}_SCHEMA_MATCHES`](parsedAnswer);
+        console.log(schemaMatchResults)
+        return schemaMatchResults == false;
     } catch (err) {
         console.log(`${parsedAnswer.action}_SCHEMA_MATCHES`)
         console.log(err)

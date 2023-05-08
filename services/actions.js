@@ -38,15 +38,8 @@ const actionMethods = {
         return `{"action":"CONFIRMATION"}`;
     },
 
-    'CONFIRMATION_SCHEMA_MATCHES': (incomingPayload) => {
+    'CONFIRMATION_SCHEMA_MATCHES': (_incomingPayload) => {
         let matches = true;
-
-        if (!incomingPayload['CONFIRMATION']) {
-            matches = false;
-        }
-
-        // console.log(`CONFIRMATION_SCHEMA_MATCHES ${matches}`)
-
         return matches;
     },
 
@@ -89,10 +82,8 @@ const actionMethods = {
         let matches = true;
 
         Object.keys(incomingPayload.payload).forEach(title => {
-            if (typeof incomingPayload.payload[title] !== 'object') {
-                matches = false;
-            }
-
+            console.log('title')
+            console.log(typeof title)
             // make sure each title is type of array
             if (!Array.isArray(incomingPayload.payload[title])) {
                 matches = false;
@@ -100,6 +91,8 @@ const actionMethods = {
 
             // make sure each subtitle is type of string
             incomingPayload.payload[title].forEach(subtitle => {
+                console.log('subtitle')
+                console.log(typeof subtitle)
                 if (typeof subtitle !== 'string') {
                     matches = false;
                 }
