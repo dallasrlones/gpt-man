@@ -40,6 +40,28 @@ let promptCreateQuestionsForDocument = (docName) => {
     return prompt;
 };
 
+// {
+//     "action":"CREATE_SECTIONS",
+//     "title": "Company Overview",
+//     "subtitle": "Company History",
+//     "payload": [
+//     "Founding of the company",
+//     "Key milestones in company history",
+//     "Significant changes in company direction or leadership",
+//     "Company growth and expansion",
+//     "Notable partnerships or collaborations",
+//     {
+//     "title": "Sources",
+//     "items": [
+//     "Company website",
+//     "Press releases",
+//     "Media coverage",
+//     "Interviews with company executives"
+//     ]
+//     }
+//     ]
+// }
+
 let promptTemplateForTitlesAndSubTitles = () => {
     const template = {
         "Title 1 Name": ['Sub Title 1 Name'],
@@ -51,7 +73,7 @@ let promptTemplateForTitlesAndSubTitles = () => {
 
 let promptCreateTitlesAndSubTitlesForDocument = docName => {
     let prompt = `Please create me a document outline in JSON format for a ${docName}, include all the titles and sub-titles I should talk about and be thorough.`;
-    prompt += ` Please use the information from the chunks I sent you and don't make anything up, please cite your sources inside the JSON answer.`;
+    prompt += ` Please use the information from the chunks I sent you and don't make anything up.`;
     prompt += ` Please don't be vague, the more specific you are the better I can write, nothing like "Title 1" or "Competitor 1" but instead be descriptive.`;
     prompt += promptYourResponseShouldLookLike(promptTemplateForTitlesAndSubTitles());
     return prompt;
@@ -63,8 +85,8 @@ let promptTemplateSectionsForSubTitle = (title, subtitle) => {
 };
 
 let promptCreateSectionsForSubTitle = (title, subtitle) => {
-    let prompt = `Please create me an outline for the ${title} - ${subtitle} sections in JSON format.`;
-    prompt += ` Please use the information from the chunks I sent you and don't make anything up, please cite your sources inside the JSON answer.`;
+    let prompt = `Please create me an outline for the ${title} - ${subtitle} sections in JSON format and be thorough.`;
+    prompt += ` Please use the information from the chunks I sent you and don't make anything up.`;
     prompt += ` Please don't be vague, the more specific you are the better I can write, nothing like "Title 1" or "Competitor 1" but instead be descriptive.`;
     prompt += promptYourResponseShouldLookLike(promptTemplateSectionsForSubTitle(title, subtitle));
     return prompt;
@@ -77,8 +99,8 @@ let promptTemplateTopicsForSection = (title, subtitle, section) => {
 
 let promptCreateTopicsForSection = (title, subtitle, section) => {
     // know that I will be using these as blueprints to write paragraphs with these later so think of each talking point as a paragraph
-    let prompt = `Please write me the ${title} - ${subtitle} - ${section} talking points for me in JSON format.`;
-    prompt += ` Please use the information from the chunks I sent you and don't make anything up, please cite your sources inside the JSON answer.`;
+    let prompt = `Please write me the ${title} - ${subtitle} - ${section} talking points for me in JSON format and be thorough.`;
+    prompt += ` Please use the information from the chunks I sent you and don't make anything up.`;
     prompt += ` Please don't be vague, the more specific you are the better I can write, nothing like "Title 1" or "Competitor 1" but instead be descriptive.`;
     prompt += ` We'll be using these as blueprints later to write paragraphs with these talking points.`;
     prompt += promptYourResponseShouldLookLike(promptTemplateTopicsForSection(title, subtitle, section));
@@ -93,7 +115,7 @@ let promptCreateActionComplete = () => {
 };
 
 let promptCreateCouldntUnderstandAnswer = () => {
-    let prompt = `That was a great answer! But, I couldn't JSON.parse that, can you please try again and try to format it based on the question?`;
+    let prompt = `That was a great answer! But, I couldn't JSON.parse that, can you please try again and try to format it based on the schema provided in the question.`;
     prompt += ` If you were confirming something please return the { "action": "CONFIRMATION" } JSON response.`;
     prompt += ` If you were trying to ask me a question because you don't have enough information please use the { "action": "ASK_QUESTIONS_FOR_CONTEXT", "payload": ["questions", "to", "ask"] } JSON response.`;
     prompt += ` Please only select one of the action response templates in JSON format for your response.`;

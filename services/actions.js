@@ -41,7 +41,7 @@ const actionMethods = {
             matches = false;
         }
 
-        console.log(`CONFIRMATION_SCHEMA_MATCHES ${matches}`)
+        // console.log(`CONFIRMATION_SCHEMA_MATCHES ${matches}`)
 
         return matches;
     },
@@ -60,7 +60,7 @@ const actionMethods = {
             matches = false;
         }
 
-        console.log(`MEMORY_UPLOAD_COMPLETE_SCHEMA_MATCHES ${matches}`)
+        // console.log(`MEMORY_UPLOAD_COMPLETE_SCHEMA_MATCHES ${matches}`)
 
         return matches;
     },
@@ -88,9 +88,16 @@ const actionMethods = {
             if (!Array.isArray(incomingPayload.payload[title])) {
                 matches = false;
             }
+
+            // make sure each subtitle is type of string
+            incomingPayload.payload[title].forEach(subtitle => {
+                if (typeof subtitle !== 'string') {
+                    matches = false;
+                }
+            });
         })
 
-        console.log(`CREATE_TITLES_AND_SUBTITLES_SCHEMA_MATCHES ${matches}`)
+        // console.log(`CREATE_TITLES_AND_SUBTITLES_SCHEMA_MATCHES ${matches}`)
         return matches;
     },
     'CREATE_TITLES_AND_SUBTITLES': (payload, done) => {
@@ -132,7 +139,13 @@ const actionMethods = {
             matches = false;
         }
 
-        console.log(`CREATE_SECTIONS_SCHEMA_MATCHES ${matches}`)
+        incomingPayload.payload.forEach(section => {
+            if (typeof section !== 'string') {
+                matches = false;
+            }
+        });
+
+        // console.log(`CREATE_SECTIONS_SCHEMA_MATCHES ${matches}`)
         return matches;
     },
     'CREATE_SECTIONS': (payload, done) => {
@@ -178,7 +191,13 @@ const actionMethods = {
             matches = false;
         }
 
-        console.log(`CREATE_TALKING_POINTS_SCHEMA_MATCHES ${matches}`)
+        incomingPayload.payload.forEach(talkingPoint => {
+            if (typeof talkingPoint !== 'string') {
+                matches = false;
+            }
+        });
+
+        // console.log(`CREATE_TALKING_POINTS_SCHEMA_MATCHES ${matches}`)
         return matches;
     },
     'CREATE_TALKING_POINTS': (payload, done) => {

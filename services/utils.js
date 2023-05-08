@@ -102,6 +102,8 @@ const formatDocIfExists = () => {
         const lastElementSelector = selectorDocument().querySelectorAll('h3, p')[lastElement];
         if (lastElementSelector) {
             lastElementSelector.scrollIntoView();
+            // add .glowing-text
+            lastElementSelector.classList.add('glowing-text');
         }
     }
 };
