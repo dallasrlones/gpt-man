@@ -50,35 +50,35 @@ let promptTemplateForTitlesAndSubTitles = () => {
 };
 
 let promptCreateTitlesAndSubTitlesForDocument = docName => {
-    let prompt = `Please create me a document outline in JSON format for a ${docName}, include all the titles and sub-titles I should talk about.`;
-    prompt += ` Please use the information from the chunks I sent you and don't make anything up, please cite your sources.`;
+    let prompt = `Please create me a document outline in JSON format for a ${docName}, include all the titles and sub-titles I should talk about and be thorough.`;
+    prompt += ` Please use the information from the chunks I sent you and don't make anything up, please cite your sources inside the JSON answer.`;
     prompt += ` Please don't be vague, the more specific you are the better I can write, nothing like "Title 1" or "Competitor 1" but instead be descriptive.`;
     prompt += promptYourResponseShouldLookLike(promptTemplateForTitlesAndSubTitles());
     return prompt;
 };
 
 let promptTemplateSectionsForSubTitle = (title, subtitle) => {
-    let template = ['Section Topic 1', 'Section Topic 2', 'Section Topic 3', '...'];
+    let template = ['Section Topic 1', 'Section Topic 2', 'Section Topic 3', 'Section Topic 17'];
     return promptBuildActionResponse('CREATE_SECTIONS', { title, subtitle, payload: template });
 };
 
 let promptCreateSectionsForSubTitle = (title, subtitle) => {
     let prompt = `Please create me an outline for the ${title} - ${subtitle} sections in JSON format.`;
-    prompt += ` Please use the information from the chunks I sent you and don't make anything up, please cite your sources.`;
+    prompt += ` Please use the information from the chunks I sent you and don't make anything up, please cite your sources inside the JSON answer.`;
     prompt += ` Please don't be vague, the more specific you are the better I can write, nothing like "Title 1" or "Competitor 1" but instead be descriptive.`;
     prompt += promptYourResponseShouldLookLike(promptTemplateSectionsForSubTitle(title, subtitle));
     return prompt;
 };
 
 let promptTemplateTopicsForSection = (title, subtitle, section) => {
-    let template = ['Section Talking Point 1', 'Talking Point 2', 'Taling Point 3', '...'];
+    let template = ['Section Talking Point 1', 'Talking Point 2', 'Talking Point 3', 'Talkign Point 7'];
     return promptBuildActionResponse('CREATE_TALKING_POINTS', { title, subtitle, section, payload: template });
 };
 
 let promptCreateTopicsForSection = (title, subtitle, section) => {
     // know that I will be using these as blueprints to write paragraphs with these later so think of each talking point as a paragraph
     let prompt = `Please write me the ${title} - ${subtitle} - ${section} talking points for me in JSON format.`;
-    prompt += ` Please use the information from the chunks I sent you and don't make anything up, please cite your sources.`;
+    prompt += ` Please use the information from the chunks I sent you and don't make anything up, please cite your sources inside the JSON answer.`;
     prompt += ` Please don't be vague, the more specific you are the better I can write, nothing like "Title 1" or "Competitor 1" but instead be descriptive.`;
     prompt += ` We'll be using these as blueprints later to write paragraphs with these talking points.`;
     prompt += promptYourResponseShouldLookLike(promptTemplateTopicsForSection(title, subtitle, section));
@@ -109,7 +109,7 @@ let promptCreateUpdateMemory = (chunkSize) => {
 };
 
 let promptCreateUploadMemory = (i, size, chunk) => {
-    let prompt = `Here is Chunk ${i} of ${size} of what I'm sending you, when you've read it please send me a confirmation response formatted in JSON.`;
+    let prompt = `I'm going to be sending you ${size + 1} chunks of information to refresh your context of what I'm trying to do. Here is Chunk ${i} of ${size} of what I'm sending you, when you've read it please send me a CONFIRMATION response formatted in JSON.`;
     prompt += promptYourResponseShouldLookLikeWithoutQuestions(promptBuildActionResponse('CONFIRMATION'));
     prompt += `\n\n${chunk}\n\n`;
     return prompt;

@@ -128,7 +128,7 @@ const updateShortTermMemory = () => {
     chunks.reverse().forEach((chunk, i) => {
         addToFrontOfQueue(promptCreateUploadMemory(i, chunks.length - 1,chunk));
     });
-    addToFrontOfQueue(promptCreateUpdateMemory(chunks.length - 1));
+    // addToFrontOfQueue(promptCreateUpdateMemory(chunks.length - 1));
 };
 
 // if invalid response, make sure memory update is run after invalid response is handled
@@ -180,7 +180,6 @@ const queueHasItems = () => {
 };
 
 const processAnswer = (payload, done) => {
-    // console.log(payload)
     debug(`Processing answer: ${JSON.stringify(payload)}`);
 
     if (payload.action == undefined) {
@@ -225,6 +224,7 @@ const checkUIState = () => {
     // update questions asked vs answered
     selectorDocumanQuestionsAsked().innerText = state.questions_asked;
     selectorDocumanQuestionsAnswered().innerText = state.questions_answered;
+    selectorDocumanQuestionsProcessed().innerText = state.questions_processed;
     // selectorDocumanQuestionsProcessed().innerText = state.questions_processed;
     // queuelength
     selectorDocumanQueueLength().innerText = `${state.queue.length} Items in Queue`;
@@ -308,27 +308,20 @@ const doesntMatchSchema = (parsedAnswer) => {
 };
 
 const handleAndProcessAnswerIfAvailable = () => {
-    console.log('handleAndProcessAnswerIfAvailable')
-    console.log(answerAvailableToParse())
     if (answerAvailableToParse()) {
         debug('Answer is available and asked is greater than answered')
         addToQuestionsAnsweredCount();
         state.last_answer = gptCurrentAnswer();
 
-        console.log('attempting to process')
         const parsedAnswer = attemptToProcessJSONAnswer(state.last_answer);
         
-        console.log(`SCHEMA MATCH ${doesntMatchSchema(parsedAnswer)}`)
-
         if (parsedAnswer == false) {
-            console.log('invalid response')
             state.invalid_response = true;
             debug('Answer could not be parsed')
             playSoundNow('invalid_response')
             addToFrontOfQueue(promptCreateCouldntUnderstandAnswer());
             state.questions_processed += 1;
         } else {
-            console.log('valid response')
             state.invalid_response = false;
             debug('Answer was parsed')
             processAnswer(parsedAnswer, () => { state.questions_processed += 1; });

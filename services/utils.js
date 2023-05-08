@@ -49,34 +49,20 @@ const formatOutlineToHtml = () => {
     const outline = state.outline;
     const outlineKeys = Object.keys(outline);
     let htmlString = '';
-    outlineKeys.forEach(title => {
+    outlineKeys.forEach((title) => {
         htmlString += `<h1>${title}</h1>`;
         const subtitles = outline[title];
         const subtitleKeys = Object.keys(subtitles);
-        subtitleKeys.forEach(subtitle => {
+        subtitleKeys.forEach((subtitle) => {
             htmlString += `<h2>${subtitle}</h2>`;
             const sections = subtitles[subtitle];
             const sectionKeys = Object.keys(sections);
-            sectionKeys.forEach((section, i) => {
+            sectionKeys.forEach((section) => {
                 htmlString += `<h3>${section}</h3>`;
                 const talkingPoints = sections[section];
                 const talkingPointKeys = Object.keys(talkingPoints);
-
-                let sectionsAnchored = true;
-                if (i === sectionKeys.length - 1) {
-                    if(talkingPointKeys.length > 0) {
-                        sectionsAnchored = false;
-                    } else {
-                        htmlString += `<span id="documan-scroll"></span>`;
-                    }
-                }
-
-                talkingPointKeys.forEach((talkingPoint, tp) => {
+                talkingPointKeys.forEach((talkingPoint) => {
                     htmlString += `<p>${talkingPoints[talkingPoint]}</p>`;
-
-                    if (tp === talkingPointKeys.length - 1 && sectionsAnchored === false  && i === sectionKeys.length - 1) {
-                        htmlString += `<span id="documan-scroll"></span>`;
-                    }
                 });
             });
         });
@@ -111,17 +97,13 @@ const formatDocIfExists = () => {
     debug('Formatting doc if exists')
     if (Object.keys(state.outline).length > 0) {
         selectorDocument().innerHTML = formatOutlineToHtml();
-        const scroll = selectorDocumanScroll();
-        if (scroll != null) {
-            scrollElementToAnchor(selectorDocument(), 'documan-scroll');
+        // find the last p in the element, if none are there find the last h3, if none are there find the last h2
+        const lastElement = selectorDocument().querySelectorAll('h3, p').length - 1;
+        const lastElementSelector = selectorDocument().querySelectorAll('h3, p')[lastElement];
+        if (lastElementSelector) {
+            lastElementSelector.scrollIntoView();
         }
     }
-};
-
-const scrollElementToAnchor = (element, anchor) => {
-    debug('Scrolling element to anchor')
-    const elementToScrollTo = element.querySelector(`#${anchor}`);
-    elementToScrollTo.scrollIntoView();
 };
 
 const gatherAndOrderTalkingPoints = () => {

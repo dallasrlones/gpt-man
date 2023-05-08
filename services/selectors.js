@@ -141,3 +141,7 @@ const selectorDocumanSounds = () => {
 const selectorDocumanScroll = () => {
     return document.getElementById("documan-scroll");
 };
+
+const selectorDocumanQuestionsProcessed = () => {
+    return document.getElementById("documan-q-processed");
+}
