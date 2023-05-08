@@ -148,10 +148,10 @@ const generateDocument = (docType) => {
     debug(`Generating document of type ${docType}`);
     state.document_name = docType;
     playSoundNow('document_started');
-    updateShortTermMemory();
     addToFrontOfQueue(promptCreateQuestionsForDocument(docType))
     addToFrontOfQueue(promptCreateDocument(docType));
     addToQueue(promptCreateTitlesAndSubTitlesForDocument(docType));
+    updateShortTermMemory();
     saveContext();
 };
 
@@ -161,8 +161,6 @@ const updateSaveFile = () => {
     selectorOutline().value = JSON.stringify(state.outline, null, 2);
     formatDocIfExists();
 };
-
-
 
 const askedGreaterThanAnswered = () => {
     return state.questions_asked > state.questions_answered;

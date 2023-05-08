@@ -71,10 +71,10 @@ const formatOutlineToHtml = () => {
                     }
                 }
 
-                talkingPointKeys.forEach((talkingPoint, i) => {
+                talkingPointKeys.forEach((talkingPoint, tp) => {
                     htmlString += `<p>${talkingPoints[talkingPoint]}</p>`;
 
-                    if (i === talkingPointKeys.length - 1 && sectionsAnchored === false) {
+                    if (tp === talkingPointKeys.length - 1 && sectionsAnchored === false  && i === sectionKeys.length - 1) {
                         htmlString += `<span id="documan-scroll"></span>`;
                     }
                 });
