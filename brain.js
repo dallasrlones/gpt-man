@@ -138,7 +138,7 @@ const checkForMemoryUpdate = () => {
         state.sinceLastMemoryUpdate += 1;
     }
 
-    if (state.sinceLastMemoryUpdate > 4 && state.uploading == false) {
+    if (state.sinceLastMemoryUpdate > 3 && state.uploading == false) {
         state.sinceLastMemoryUpdate = 0;
         updateShortTermMemory();
     }
