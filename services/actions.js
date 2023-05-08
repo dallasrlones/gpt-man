@@ -34,6 +34,16 @@ const actionMethods = {
         done();
     },
 
+    'CONFIRMATION_SCHEMA_MATCHES': (incomingPayload) => {
+        let matches = true;
+
+        if (!incomingPayload['CONFIRMATION']) {
+            matches = false;
+        }
+
+        return matches;
+    },
+
     'CONFIRMATION': (payload, done) => {
         debug('Confirmation received')
         // display to the user the chunk progress
@@ -41,6 +51,15 @@ const actionMethods = {
         done();
     },
 
+    'MEMORY_UPLOAD_COMPLETE_SCHEMA_MATCHES': (incomingPayload) => {
+        let matches = true;
+
+        if (!incomingPayload['CONFIRMATION']) {
+            matches = false;
+        }
+
+        return matches;
+    },
     'MEMORY_UPLOAD_COMPLETE': (_payload, done) => {
         debug('Memory upload complete');
         state.uploading = false;
@@ -51,6 +70,24 @@ const actionMethods = {
         debug(`Playing sound ${payload.payload}`)
         playSound(payload.payload);
         done();
+    },
+    'CREATE_TITLES_AND_SUBTITLES_SCHEMA_MATCHES': (incomingPayload) => {
+        // make sure there is an object in payload.payload with subkeys
+        let matches = true;
+
+        Object.keys(payload.payload).forEach(title => {
+            if (typeof payload.payload[title] !== 'object') {
+                matches = false;
+            }
+
+            Object.keys(payload.payload[title]).forEach(subtitle => {
+                if (typeof payload.payload[title][subtitle] !== 'object') {
+                    matches = false;
+                }
+            });
+        })
+
+        return matches;
     },
     'CREATE_TITLES_AND_SUBTITLES': (payload, done) => {
         setUIState(`creating titles and subtitles`);
@@ -79,6 +116,19 @@ const actionMethods = {
         }
 
         done();
+    },
+    'CREATE_SECTIONS_SCHEMA_MATCHES': (incomingPayload) => {
+        let matches = true;
+
+        if (!incomingPayload.title || !incomingPayload.subtitle || !incomingPayload.payload) {
+            matches = false;
+        }
+
+        if (!Array.isArray(incomingPayload.payload)) {
+            matches = false;
+        }
+
+        return matches;
     },
     'CREATE_SECTIONS': (payload, done) => {
         debug('Creating sections')
@@ -111,6 +161,19 @@ const actionMethods = {
         }
 
         done();
+    },
+    'CREATE_TALKING_POINTS_SCHEMA_MATCHES': (incomingPayload) => {
+        let matches = true;
+
+        if (!incomingPayload.title || !incomingPayload.subtitle || !incomingPayload.section || !incomingPayload.payload) {
+            matches = false;
+        }
+
+        if (!Array.isArray(incomingPayload.payload)) {
+            matches = false;
+        }
+
+        return matches;
     },
     'CREATE_TALKING_POINTS': (payload, done) => {
         debug('Creating talking points')
@@ -152,6 +215,19 @@ const actionMethods = {
     'CREATE_PARAGRAPH': (payload, done) => {
         debug('Creating paragraph')
         done();
+    },
+    'ASK_QUESTIONS_FOR_CONTEXT_SCHEMA_MATCHES': (incomingPayload) => {
+        let matches = true;
+
+        if (!incomingPayload.questions) {
+            matches = false;
+        }
+
+        if (!Array.isArray(incomingPayload.questions)) {
+            matches = false;
+        }
+
+        return matches;
     },
     'ASK_QUESTIONS_FOR_CONTEXT': questionaireActions.askQuestionsForContext
 };

@@ -292,21 +292,38 @@ const answerAvailableToParse = () => {
     return answerAvailable() && askedGreaterThanAnswered();
 };
 
+const doesntMatchSchema = (parsedAnswer) => {
+    if (parsedAnswer.action == undefined || parsedAnswer.payload == undefined || actionMethods[parsedAnswer.action] == undefined) {
+        return true;
+    }
+
+    try {
+        return actionMethods[`${parsedAnswer.action}_SCHEMA_MATCHES`](parsedAnswer);
+    } catch (err) {
+        return true;
+    }
+};
+
 const handleAndProcessAnswerIfAvailable = () => {
+    console.log('handleAndProcessAnswerIfAvailable')
+    console.log(answerAvailableToParse())
     if (answerAvailableToParse()) {
         debug('Answer is available and asked is greater than answered')
         addToQuestionsAnsweredCount();
         state.last_answer = gptCurrentAnswer();
 
+        console.log('attempting to process')
         const parsedAnswer = attemptToProcessJSONAnswer(state.last_answer);
         
-        if (parsedAnswer == false) {
+        if (parsedAnswer == false || doesntMatchSchema(parsedAnswer)) {
+            console.log('invalid response')
             state.invalid_response = true;
             debug('Answer could not be parsed')
             playSoundNow('invalid_response')
             addToFrontOfQueue(promptCreateCouldntUnderstandAnswer());
             state.questions_processed += 1;
         } else {
+            console.log('valid response')
             state.invalid_response = false;
             debug('Answer was parsed')
             processAnswer(parsedAnswer, () => { state.questions_processed += 1; });
@@ -315,7 +332,7 @@ const handleAndProcessAnswerIfAvailable = () => {
 };
 
 const handleAndProcessQuestionIfAvailable = () => {
-    if (queueHasItems() && answeredIsEqualToProcessed() && state.invalid_response == false) {
+    if (queueHasItems() && answeredIsEqualToProcessed()) {
         debug('Queue has items and answered is equal to processed')
         checkForMemoryUpdate();
         state.last_question = state.queue.shift();
