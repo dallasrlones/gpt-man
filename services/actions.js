@@ -34,6 +34,10 @@ const actionMethods = {
         done();
     },
 
+    'CONFIRMATION_SCHEMA_TEMPLATE': () => {
+        return `{"action":"CONFIRMATION"}`;
+    },
+
     'CONFIRMATION_SCHEMA_MATCHES': (incomingPayload) => {
         let matches = true;
 
@@ -75,6 +79,11 @@ const actionMethods = {
         playSound(payload.payload);
         done();
     },
+
+    'CREATE_TITLES_AND_SUBTITLES_SCHEMA_TEMPLATE': () => {
+        return `{"action":"CREATE_TITLES_AND_SUBTITLES", "payload": { "title 1": ["Subtitle 1", "Subtitle 2", ...], ... } }`;
+    },
+
     'CREATE_TITLES_AND_SUBTITLES_SCHEMA_MATCHES': (incomingPayload) => {
         // make sure there is an object in payload.payload with subkeys
         let matches = true;
@@ -128,6 +137,11 @@ const actionMethods = {
 
         done();
     },
+
+    'CREATE_SECTIONS_SCHEMA_TEMPLATE': () => {
+        return `{"action":"CREATE_SECTIONS", "title": "Title Name", "subtitle": "Subtitle Name", "payload": ["Section 1 Name", "Section 2 Name", ...] }`;
+    },
+
     'CREATE_SECTIONS_SCHEMA_MATCHES': (incomingPayload) => {
         let matches = true;
 
@@ -180,6 +194,11 @@ const actionMethods = {
 
         done();
     },
+
+    'CREATE_TALKING_POINTS_SCHEMA_TEMPLATE': () => {
+        return `{"action":"CREATE_TALKING_POINTS", "title": "Title Name", "subtitle": "Subtitle Name", "section": "Section Name", "payload": ["Talking Point 1", "Talking Point 2", ...] }`;
+    },
+
     'CREATE_TALKING_POINTS_SCHEMA_MATCHES': (incomingPayload) => {
         let matches = true;
 
@@ -241,6 +260,11 @@ const actionMethods = {
         debug('Creating paragraph')
         done();
     },
+
+    'ASK_QUESTIONS_FOR_CONTEXT_SCHEMA_TEMPLATE': () => {
+        return `{"action":"ASK_QUESTIONS_FOR_CONTEXT", "payload": ["Question 1",...] }`;
+    },
+
     'ASK_QUESTIONS_FOR_CONTEXT_SCHEMA_MATCHES': (incomingPayload) => {
         let matches = true;
 

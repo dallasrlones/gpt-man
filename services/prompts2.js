@@ -122,6 +122,13 @@ let promptCreateCouldntUnderstandAnswer = () => {
     return prompt;
 };
 
+let promptCreateCouldntUnderstandAnswerSchemaMismatch = (action) => {
+    const schema = actionMethods[`${action}_SCHEMA_TEMPLATE`]();
+    let prompt = ` That was a great answer but it didn't match the schema I wanted, please try again and try to format it based on the schema provided in the question.`;
+    prompt += ` Your answer should be formatted in this schema:\n${schema}\n\n`;
+    return prompt;
+};
+
 // MEMORY CREATION / UPLOAD
 
 let promptCreateUpdateMemory = (chunkSize) => {

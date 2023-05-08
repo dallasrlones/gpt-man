@@ -179,8 +179,30 @@ const queueHasItems = () => {
     return state.queue.length > 0;
 };
 
+const doesntMatchSchema = (parsedAnswer) => {
+    if (parsedAnswer.action == undefined || actionMethods[parsedAnswer.action] == undefined) {
+        return true;
+    }
+
+    try {
+        return actionMethods[`${parsedAnswer.action}_SCHEMA_MATCHES`](parsedAnswer);
+    } catch (err) {
+        console.log(`${parsedAnswer.action}_SCHEMA_MATCHES`)
+        console.log(err)
+        return true;
+    }
+};
+
 const processAnswer = (payload, done) => {
     debug(`Processing answer: ${JSON.stringify(payload)}`);
+
+    if(doesntMatchSchema(payload)) {
+        debug('Answer did not match schema')
+        console.log('didnt match')
+        console.log(payload)
+        addToFrontOfQueue(promptCreateCouldntUnderstandAnswerSchemaMismatch(payload.action));
+        return;
+    }
 
     if (payload.action == undefined) {
         // insert didn't understand in front of queue
@@ -291,20 +313,6 @@ const powerIsOn = () => {
 
 const answerAvailableToParse = () => {
     return answerAvailable() && askedGreaterThanAnswered();
-};
-
-const doesntMatchSchema = (parsedAnswer) => {
-    if (parsedAnswer.action == undefined || parsedAnswer.payload == undefined || actionMethods[parsedAnswer.action] == undefined) {
-        return true;
-    }
-
-    try {
-        return actionMethods[`${parsedAnswer.action}_SCHEMA_MATCHES`](parsedAnswer);
-    } catch (err) {
-        console.log(`${parsedAnswer.action}_SCHEMA_MATCHES`)
-        console.log(err)
-        return true;
-    }
 };
 
 const handleAndProcessAnswerIfAvailable = () => {
