@@ -96,6 +96,7 @@ let promptCreateCouldntUnderstandAnswer = () => {
     let prompt = `That was a great answer! But, I couldn't JSON.parse that, can you please try again and try to format it based on the question?`;
     prompt += ` If you were confirming something please return the { "action": "CONFIRMATION" } JSON response.`;
     prompt += ` If you were trying to ask me a question because you don't have enough information please use the { "action": "ASK_QUESTIONS_FOR_CONTEXT", "payload": ["questions", "to", "ask"] } JSON response.`;
+    prompt += ` Please only select one of the action response templates in JSON format for your response.`;
     return prompt;
 };
 

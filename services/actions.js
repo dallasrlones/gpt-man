@@ -41,6 +41,8 @@ const actionMethods = {
             matches = false;
         }
 
+        console.log(`CONFIRMATION_SCHEMA_MATCHES ${matches}`)
+
         return matches;
     },
 
@@ -57,6 +59,8 @@ const actionMethods = {
         if (!incomingPayload['CONFIRMATION']) {
             matches = false;
         }
+
+        console.log(`MEMORY_UPLOAD_COMPLETE_SCHEMA_MATCHES ${matches}`)
 
         return matches;
     },
@@ -75,18 +79,18 @@ const actionMethods = {
         // make sure there is an object in payload.payload with subkeys
         let matches = true;
 
-        Object.keys(payload.payload).forEach(title => {
-            if (typeof payload.payload[title] !== 'object') {
+        Object.keys(incomingPayload.payload).forEach(title => {
+            if (typeof incomingPayload.payload[title] !== 'object') {
                 matches = false;
             }
 
-            Object.keys(payload.payload[title]).forEach(subtitle => {
-                if (typeof payload.payload[title][subtitle] !== 'object') {
-                    matches = false;
-                }
-            });
+            // make sure each title is type of array
+            if (!Array.isArray(incomingPayload.payload[title])) {
+                matches = false;
+            }
         })
 
+        console.log(`CREATE_TITLES_AND_SUBTITLES_SCHEMA_MATCHES ${matches}`)
         return matches;
     },
     'CREATE_TITLES_AND_SUBTITLES': (payload, done) => {
@@ -128,6 +132,7 @@ const actionMethods = {
             matches = false;
         }
 
+        console.log(`CREATE_SECTIONS_SCHEMA_MATCHES ${matches}`)
         return matches;
     },
     'CREATE_SECTIONS': (payload, done) => {
@@ -173,6 +178,7 @@ const actionMethods = {
             matches = false;
         }
 
+        console.log(`CREATE_TALKING_POINTS_SCHEMA_MATCHES ${matches}`)
         return matches;
     },
     'CREATE_TALKING_POINTS': (payload, done) => {

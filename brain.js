@@ -148,10 +148,11 @@ const generateDocument = (docType) => {
     debug(`Generating document of type ${docType}`);
     state.document_name = docType;
     playSoundNow('document_started');
-    addToFrontOfQueue(promptCreateQuestionsForDocument(docType))
+    // addToFrontOfQueue(promptCreateQuestionsForDocument(docType))
+    updateShortTermMemory();
     addToFrontOfQueue(promptCreateDocument(docType));
     addToQueue(promptCreateTitlesAndSubTitlesForDocument(docType));
-    updateShortTermMemory();
+    
     saveContext();
 };
 
@@ -300,6 +301,8 @@ const doesntMatchSchema = (parsedAnswer) => {
     try {
         return actionMethods[`${parsedAnswer.action}_SCHEMA_MATCHES`](parsedAnswer);
     } catch (err) {
+        console.log(`${parsedAnswer.action}_SCHEMA_MATCHES`)
+        console.log(err)
         return true;
     }
 };
@@ -315,7 +318,9 @@ const handleAndProcessAnswerIfAvailable = () => {
         console.log('attempting to process')
         const parsedAnswer = attemptToProcessJSONAnswer(state.last_answer);
         
-        if (parsedAnswer == false || doesntMatchSchema(parsedAnswer)) {
+        console.log(`SCHEMA MATCH ${doesntMatchSchema(parsedAnswer)}`)
+
+        if (parsedAnswer == false) {
             console.log('invalid response')
             state.invalid_response = true;
             debug('Answer could not be parsed')
