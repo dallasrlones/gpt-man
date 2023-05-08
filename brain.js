@@ -181,13 +181,13 @@ const queueHasItems = () => {
 
 const doesntMatchSchema = (parsedAnswer) => {
     if (parsedAnswer.action == undefined || actionMethods[parsedAnswer.action] == undefined) {
-        console.log('action undefined or missing')
+        // console.log('action undefined or missing')
         return true;
     }
 
     try {
         const schemaMatchResults = actionMethods[`${parsedAnswer.action}_SCHEMA_MATCHES`](parsedAnswer);
-        console.log(schemaMatchResults)
+        // console.log(schemaMatchResults)
         return schemaMatchResults == false;
     } catch (err) {
         console.log(`${parsedAnswer.action}_SCHEMA_MATCHES`)
@@ -201,8 +201,10 @@ const processAnswer = (payload, done) => {
 
     if(doesntMatchSchema(payload)) {
         debug('Answer did not match schema')
-        console.log('didnt match')
-        console.log(payload)
+        // console.log('didnt match')
+        // console.log(payload)
+        playSoundNow('invalid_response');
+        addToErrorCount();
         addToFrontOfQueue(promptCreateCouldntUnderstandAnswerSchemaMismatch(payload.action));
         return;
     }
