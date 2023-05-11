@@ -50,22 +50,25 @@ const formatOutlineToHtml = () => {
     const outlineKeys = Object.keys(outline);
     let htmlString = '';
     outlineKeys.forEach((title) => {
-        htmlString += `<h1>${title}</h1>`;
+        htmlString += `<div><h1>${title}</h1>`;
         const subtitles = outline[title];
         const subtitleKeys = Object.keys(subtitles);
         subtitleKeys.forEach((subtitle) => {
-            htmlString += `<h2>${subtitle}</h2>`;
+            htmlString += `<div><h2>${subtitle}</h2>`;
             const sections = subtitles[subtitle];
             const sectionKeys = Object.keys(sections);
             sectionKeys.forEach((section) => {
-                htmlString += `<h3>${section}</h3>`;
+                htmlString += `<div><h3>${section}</h3>`;
                 const talkingPoints = sections[section];
                 const talkingPointKeys = Object.keys(talkingPoints);
                 talkingPointKeys.forEach((talkingPoint) => {
                     htmlString += `<p>${talkingPoints[talkingPoint]}</p>`;
                 });
+                htmlString += '</div>';
             });
+            htmlString += '</div>';
         });
+        htmlString += '</div>';
     });
     return htmlString;
 };
@@ -103,7 +106,9 @@ const formatDocIfExists = () => {
         if (lastElementSelector) {
             lastElementSelector.scrollIntoView({ behavior: 'smooth', block: 'center'});
             // add .glowing-text
-            lastElementSelector.classList.add('glowing-text');
+            lastElementSelector.parentElement.parentElement.children.forEach(child => {
+                child.classList.add('glowing-text');
+            });
         }
     }
 };

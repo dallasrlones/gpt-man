@@ -132,13 +132,14 @@ const updateShortTermMemory = () => {
 };
 
 // if invalid response, make sure memory update is run after invalid response is handled
+// if invalid, store old answer in last_answer and rerun that queue after memory update
 const checkForMemoryUpdate = () => {
     debug('Checking for memory update');
     if (state.uploading == false) {
         state.sinceLastMemoryUpdate += 1;
     }
 
-    if (state.sinceLastMemoryUpdate > 3 && state.uploading == false) {
+    if (state.sinceLastMemoryUpdate > 2 && state.uploading == false && state.invalid_response == false) {
         state.sinceLastMemoryUpdate = 0;
         updateShortTermMemory();
     }

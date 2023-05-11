@@ -70,6 +70,7 @@ const answerAvailable = () => {
 const askQuestion = (prompt) => {
     debug('Asking question')
     sendGptInput(prompt);
+    playSound('typewriter_bell');
     state.questions_asked += 1;
     state.intervals_since_last_question = 0;
     for (let i = 0; i < 3; i++) { playSound('typewriter_long'); }

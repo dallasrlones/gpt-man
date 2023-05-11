@@ -73,7 +73,7 @@ let promptTemplateForTitlesAndSubTitles = () => {
 
 let promptCreateTitlesAndSubTitlesForDocument = docName => {
     let prompt = `Please create me a document outline in JSON format for a ${docName}, include all the titles and sub-titles I should talk about, be thorough`;
-    prompt += ` and use the information from the chunks I sent you, don't make anything up.`;
+    prompt += ` and use the information from the chunks I sent you, don't make anything up, please note I can only see whats returned in JSON format.`;
     prompt += ` Please don't be vague, the more specific you are the better I can write, nothing like "Title 1" or "Competitor 1" but instead be descriptive.`;
     prompt += promptYourResponseShouldLookLike(promptTemplateForTitlesAndSubTitles());
     return prompt;
@@ -86,7 +86,7 @@ let promptTemplateSectionsForSubTitle = (title, subtitle) => {
 
 let promptCreateSectionsForSubTitle = (title, subtitle) => {
     let prompt = `Please create me an outline for the ${title} - ${subtitle} sections in JSON format and be thorough.`;
-    prompt += ` Please use the information from the chunks I sent you and don't make anything up.`;
+    prompt += ` Please use the information from the chunks I sent you and don't make anything up, please note I can only see whats returned in JSON format.`;
     prompt += ` Please don't be vague, the more specific you are the better I can write, nothing like "Title 1" or "Competitor 1" but instead be descriptive.`;
     prompt += ` We'll be using these as blueprints later to write talking points with these sections.`;
     prompt += promptYourResponseShouldLookLike(promptTemplateSectionsForSubTitle(title, subtitle));
@@ -100,8 +100,8 @@ let promptTemplateTopicsForSection = (title, subtitle, section) => {
 
 let promptCreateTopicsForSection = (title, subtitle, section) => {
     // know that I will be using these as blueprints to write paragraphs with these later so think of each talking point as a paragraph
-    let prompt = `Please write me the ${title} - ${subtitle} - ${section} talking points for me in JSON format, be thorough`;
-    prompt += ` and use the information from the chunks I sent you, don't make anything up.`;
+    let prompt = `Please write me the ${title} - ${subtitle} - ${section} talking points for me in JSON format based on the Chunk information, and be thorough`;
+    prompt += ` and use the information from the chunks I sent you, don't make anything up, please note I can only see whats returned in JSON format.`;
     prompt += ` Please don't be vague, the more specific you are the better I can write. Don't write anything like "Title 1" or "[Competitor 1]" or "Feature 1", but instead be very descriptive and get your information from the Chunks.`;
     prompt += ` We'll be using these as blueprints later to write paragraphs with these talking points, so think of each talking point as a paragraph.`;
     prompt += ` Once these are done I can start writinng the document by going through each title - subtitle - section - and then talking points`;
