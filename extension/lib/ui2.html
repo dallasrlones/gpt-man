@@ -1,0 +1,95 @@
+<style>
+    .small-square {
+        width: 20px;
+        height: 20px;
+        float: left;
+        margin-right: 1px;
+    }
+
+    .green {
+        background-color: lightgreen;
+    }
+
+    .white {
+        background-color: white;
+    }
+
+    .red {
+        background-color: red;
+    }
+
+    #documan-wrapper {
+        padding: 5px;
+        background: #1d1d1d;
+        position: fixed;
+        top: 100px;
+        right: 417px;
+        z-index: 999;
+    }
+
+    #documan-context-wrapper {
+        width: 400px;
+        position: fixed;
+        top: 5px;
+        right: 15px;
+        z-index: 999;
+    }
+
+    #documan-context {
+        box-shadow: inset 0 0 15px black;
+        width: 100%;
+        min-height: 600px;
+        color: white;
+        background: #252525;
+        border: 1px dashed;
+        border-radius: 15px;
+    }
+
+    #documan-questions-asked {
+
+    }
+
+    #documan-questions-answered {
+
+    }
+
+    #documan-questions-processed {
+
+    }
+
+    #documan-checkbox {
+        float: left;
+        margin-top: 4px;
+        margin-right: 1px;
+    }
+
+    #documan-memory-upload {
+        background: #88889e;
+        padding: 10px;
+        border-radius: 5px;
+        float: right;
+        margin-right: 10px;
+    }
+</style>
+
+<div id="documan-wrapper">
+    <!-- checkbox -->
+    <input type="checkbox" id="documan-checkbox">
+    <div id="documan-question-asked" class="small-square white"></div>
+    <div id="documan-question-answered" class="small-square white"></div>
+    <div id="documan-question-processed" class="small-square white"></div>
+    <div id="documan-status" style="color: white"></div>
+    <div id="documan-queue-wrapper"  style="color: white"><span id="documan-queue">0</span> []</div>
+    <div>
+        <span id="documan-questions-asked-count"  style="color: white">0</span>/<span id="documan-questions-answered-count">0</span>/<span id="documan-questions-processed-count">0</span>
+    </div>
+    <div id="documan-countdown"  style="color: white"></div>
+</div>
+
+<div id="documan-context-wrapper">
+    <div>
+        <h2 style="float:right; padding-right: 20px; color: white;">host: <span id="documan-host"></span>:1337</h2>
+    </div>
+    <textarea id="documan-context" placeholder="Context"></textarea>
+    <button id="documan-memory-upload" style="color: white">Upload Context To Memory</button>
+</div>
